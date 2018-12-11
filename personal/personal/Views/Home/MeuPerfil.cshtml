@@ -1,0 +1,94 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style type="text/css">
+        body {
+            color: #404E67;
+            background: #F5F7FA;
+        }
+    </style>
+</head>
+<body>
+    <div class="container col-md-8 col-md-offset-2 " style="margin-top:110PX; background:#ffffff">
+        <h3><b>Meu Perfil</b></h3>
+        @foreach (var item in ViewBag.ItemData)
+    {
+        <img src="@Url.Content("~/FileUpload/" + item.IMAGE_NAME)" class="img-rounded float-left imagemPersonal" style="width:180px;height:200px;margin-top:4%;margin-left:15%" alt="teste">
+        <div id="foto" style="float:right;margin-right:13%;margin-top:15%">
+            <label for="imagem">Alterar foto para exibição</label>
+            @Html.TextBox("file", "", new { type = "file" })
+        </div>
+        <form style="margin-top:20px" method="post" id="form1">
+
+            <div class="form-group">
+                <label for="exampleFormControlInput13">Nome</label>
+                <input class="form-control" id="nome" type="text" name="nome" value="@item.NOME">
+            </div>
+            <div class="form-group">
+                <label for="validationCustom04">CPF</label>
+                <input type="text" class="form-control" id="cpf" name="cpf" placeholder="CPF" value="@item.CPF" required>
+            </div>
+            <div class="form-group">
+                <label for="validationCustom04" style="margin-top:10px">CREF</label>
+                <input type="text" class="form-control" id="cref" name="cref" value="@item.CREF" required>
+            </div>
+            <div class="form-group">
+                <label for="validationCustom04" style="margin-top:10px">UF CREF</label>
+                <select class="form-control form-control-lg" id="uf" name="uf">
+                    <option>@item.UF_CREF</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="exampleFormControlInput1">Email address</label>
+                <input type="email" class="form-control" id="email" name="email" value="@item.EMAIL" onblur="funcLogin()">
+            </div>
+
+            <div class="form-group">
+                <label for="validationCustom04">Data Nascimento</label>
+                <input type="text" class="form-control" id="dtNascimento" name="dtNascimento" value="@item.DATA_NASCIMENTO" required>
+
+            </div>
+
+            <div class="form-group">
+                <label for="validationCustom04">Especialidade</label>
+                <input type="text" class="form-control" id="especialidade" name="especialidade" value="@item.ESPECIALIDADE" required>
+            </div>
+
+            <div class="form-group">
+                <label for="exampleFormControlSelect2">Formação</label>
+                <select id="formacao" name="formacao" class="form-control form-control-lg">
+                    <option selected>@item.FORMACAO</option>
+                    <option>Licenciatura</option>
+                    <option>Bacharelado</option>
+                    <option>Pós-Graduação</option>
+                    <option>Mestrado</option>
+                    <option>Doutorado</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="exampleFormControlSelect1">Sobre</label>
+                <textarea type="text" class="form-control" id="sobre" name="sobre" rows="8" >@item.SOBRE</textarea>
+                <small><span class="caracteres">500</span> Restantes <br></small>
+            </div>
+            <div class="form-group">
+                <label for="exampleFormControlSelect2">Metodologia</label>
+                <textarea type="text" class="form-control" id="sobre" name="sobre" rows="8" >@item.METODOLOGIA</textarea>
+                <small><span class="caracteres">500</span> Restantes <br></small>
+            </div>
+
+
+            <center>
+                <button type="submit" class="btn btn-primary">Alterar</button>
+            </center>
+
+        </form>
+}
+    </div>
+</body>
+</html>
+

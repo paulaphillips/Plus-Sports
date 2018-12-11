@@ -1,0 +1,72 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="~/lib/jQuery-Mask-Plugin-master/src/jquery.mask.js" type="text/javascript" asp-append-version="true"></script>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div style="margin-top:90PX">
+        <center><h1>Novo Usuário</h1></center>
+        <form class="col-md-8 col-md-offset-2" style="margin-top:20px" action="~/Login/NovoLogin" method="post" id="form1">
+            <h5 style="color: red;">@ViewBag.Message</h5>
+            <div class="form-group">
+                <label for="exampleFormControlInput13">Nome</label>
+                <input class="form-control" id="nome" type="text" name="nome">
+            </div>
+            <div class="form-group">
+                <label for="exampleFormControlInput1">Email</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="nome@dominio.com" onblur="funcLogin()">
+            </div>
+            <div class="form-group">
+                <label for="validationCustom04">CPF</label>
+                <input type="text" class="form-control" id="cpf" name="cpf" placeholder="CPF" required>
+                <small id="emailHelp" class="form-text text-muted" color="FF0000">@ViewBag.Error</small>
+            </div>
+
+            <div class="form-group">
+                <label for="validationCustom04">Data Nascimento</label>
+                <input type="text" class="form-control" id="dtNascimento" name="dtNascimento" placeholder="Data Nascimento" required>
+
+            </div>
+            <div class="form-group">
+                <label for="exampleFormControlSelect1" style="margin-top:40px">Dados do login</label>
+                <input type="text" class="form-control" id="emailLogin">
+            </div>
+            <div class="form-group">
+                <label for="exampleFormControlSelect1">Senha</label>
+                <input type="password" class="form-control" id="senhaLogin" name="senhaLogin">
+            </div>
+            <center>
+                <button type="submit" form="form1" class="btn btn-primary">Salvar</button>
+            </center>
+        </form>
+    </div>
+    <script type="text/javascript">
+        $('#cpf').mask('000.000.000-00', { placeholder: "___.___.___-__" });
+
+        $('#dtNascimento').mask('99/99/9999');
+
+        function funcLogin() {
+            document.getElementById("emailLogin").value = document.getElementById("email").value;
+        }
+
+        $(document).ready(function () {
+            $('.close, .leftmenutrigger, .navbar-toggler').on('click tap', function (e) {
+                $('.side-nav').toggleClass("open");
+                $('#wrapper').toggleClass("open");
+                e.preventDefault();
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,415 @@
+﻿@model personal.Models.Colaborador
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <style type="text/css">
+        body {
+            color: #404E67;
+            background: #F5F7FA;
+        }
+    </style>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap Table with Add and Delete Row Feature</title>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
+    <script src="~/Scripts/bootstrap-datepicker.js"></script>
+    <script src="~/Scripts/bootstrap-datepicker.min.js"></script>
+</head>
+<body>
+    <div class="container col-md-8 col-md-offset-2 " style="margin-top:110PX;background:#ffffff">
+        <div class="table-wrapper">
+            <div style="float:right;margin-bottom:30px">
+                @if (Model.STATUS == "EM PROCESSAMENTO")
+        {
+            <img src="~/Images/error.png" class="rounded float-left" style=" border-radius: 15px;width:15px;">
+            <small>Perfil Não Verificado</small>
+}
+else
+{
+
+        <img src="~/Images/checked.png" class="rounded float-left" style=" border-radius: 15px;width:15px;">
+        <small>Perfil Verificado</small>
+}
+
+            </div>
+
+            <img src="@Url.Content("~/FileUpload/" + Model.IMAGE_NAME)" class="rounded float-left" style=" border-radius: 10%;width:30%;float:left;margin-bottom:15px;">
+            <div style="margin-top:50px">
+                <h1><b><center>@Model.NOME</center></b></h1>
+                <input type="text" id="idColab" value="@Model.ID_COLABORADOR" hidden />
+            </div>
+            <div id="desc" style="margin-left:35%;margin-top:5%">
+
+                <h5><b>Registro:</b> @Model.CREF/@Model.UF_CREF</h5>
+                <h5><B>Especialização: </B>@Model.ESPECIALIDADE</h5>
+                <h5><b>Formação: </b>@Model.FORMACAO</h5>
+                <h5><b>Data de Nascimento: </b>@Model.DATA_NASCIMENTO_FORMATADA</h5>
+
+            </div>
+            <div id="sobre" style="margin-left:35%; margin-top:5%">
+                <h4><b>Sobre</b></h4>
+                <h5>@Model.SOBRE</h5>
+            </div>
+
+            <div id="desc" style="margin-left:35%; margin-top:5%">
+                <h4><b>Metodologia</b></h4>
+                <h5>@Model.METODOLOGIA</h5>
+            </div>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" onclick="teste()" style="width:100%;margin-top:5%">
+                Agendar
+            </button>
+            <div class="alert alert-success" role="alert" style="visibility:hidden" id="sucesso">
+                Agendamento realizado com sucesso!
+            </div>
+            <div class="alert alert-danger" role="alert" style="visibility:hidden" id="falha">
+                O agendamento não foi concluído.
+            </div>
+            <div id="agendamentos" style="visibility:hidden;margin-top">
+
+                <div id="freq">
+                    <label for="frequencia" style="max-width:45%;margin-left:4%">Frequência: </label>
+                    <input type="radio" name="frequencia" id="frequencia" value="diaria" style="margin-top:12px;margin-left:4%" checked>Diária</input>
+                    <input type="radio" name="frequencia" id="frequencia" value="mensal" style="margin-left:4%">Mensal</input>
+                </div>
+                <div id="divDt" class="col-sm-6" style="height:130px;margin-top:5%;">
+                    <label for="Data" style="max-width:45%">Data</label>
+                    <div id="horariosDiarios">
+
+                    </div>
+                </div>
+
+
+                <div class="col-12">
+                    <div class="col-6" id="horariosMod" style="display:inline;float:left;margin-left:4%">
+
+                    </div>
+                    <div class="col-6" id="diaMod" name="diaMod" style="width:30%;display:inline;float:left;">
+                    </div>
+                </div>
+
+                <div id="salvar" style="margin-top:20%;visibility:hidden">
+                    <!-- INICIO FORMULARIO BOTAO PAGSEGURO -->
+                    <form action="https://pagseguro.uol.com.br/checkout/v2/cart.html?action=add" method="post" onsubmit="PagSeguroLightbox(this, {
+                                                                                                                    success: function (transactionCode) {
+                                                                                                                         var dia = $('#horariosDiarios option:selected').val();
+                                                                                                                         var horarios = $('#horariosDiariosAg option:selected').val();
+                                                                                                                         var idColaborador = $('#idColab').val();
+
+                                                                                                                         $.ajax({
+                                                                                                                         url: '/Servicos/SalvaAgendamento',
+                                                                                                                         dataType: 'JSON',
+                                                                                                                         data: { data: dia, horario: horarios, idColab: idColaborador},
+                                                                                                                         contentType: 'application/json; charset=utf-8',
+                                                                                                                         success: function (data) {
+
+                                                                                                                             window.location = '/Home/Agendamentos';
+                                                                                                                             $('sucesso').css('visibility', 'visible');
+                                                                                                                            },
+                                                                                                                        error: function () {
+
+                                                                                                                        },
+                                                                                                                        });
+                                                                                                                    },
+                                                                                                                    abort: function () {
+                                                                                                                        $('#falha').css('visibility', 'visible');
+
+                                                                                                                    }
+                                                                                                                }); return false;">
+                        <!-- NÃO EDITE OS COMANDOS DAS LINHAS ABAIXO -->
+                        <input type="hidden" name="itemCode" value="18E08D4644440BEDD43E5FB02A3FBAEC" />
+                        <input type="hidden" name="iot" value="button" />
+                        <input type="image" src="https://stc.pagseguro.uol.com.br/public/img/botoes/pagamentos/209x48-pagar-azul-assina.gif" name="submit" alt="Pague com PagSeguro - é rápido, grátis e seguro!" />
+                    </form>
+                    <script type="text/javascript" src="https://stc.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.lightbox.js"></script>
+                    <!-- FINAL FORMULARIO BOTAO PAGSEGURO -->
+                </div>
+
+
+                <div id="alinhamento">
+                    <div class="col-lg-4" id="divSemanal" style="max-width:35%;margin-top:-25%">
+
+                    </div>
+                    <div class="col-lg-4" id="divFreq" style="max-width:25%;float: right;margin-right:37%;margin-top:-25%">
+                        <div id="mesesFreq" style="display:inline-block;">
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4" id="divHorariosMensal" style="float: right;margin-top:-25%">
+                    </div>
+                </div>
+
+            </div>
+            <div id="salvarMensal" style="visibility:hidden;float: right; margin-top: -5%">
+                <!-- INICIO FORMULARIO BOTAO PAGSEGURO -->
+                <form action="https://pagseguro.uol.com.br/checkout/v2/cart.html?action=add" method="post" onsubmit="PagSeguroLightbox(this, {
+                                                                                                                    success: function (transactionCode) {
+                                                                                                                        var diaSem = $('#diaSemanas option:selected').val();
+                                                                                                                        var mes = $('#Meses option:selected').val();
+                                                                                                                        var horarios = $('#horariosMen option:selected').val();
+                                                                                                                        var idColaborador = $('#idColab').val();
+
+
+                                                                                                                        $.ajax({
+                                                                                                                        url: '/Servicos/SalvaAgendamentoMensal',
+                                                                                                                        dataType: 'JSON',
+                                                                                                                        data: { data: diaSem, horario: horarios, mes: mes, idColab: idColaborador},
+                                                                                                                        contentType: 'application/json; charset=utf-8',
+                                                                                                                        success: function (data) {
+                                                                                                                            window.location = '/Home/Agendamentos';
+                                                                                                                            $('sucesso').css('visibility', 'visible');
+                                                                                                                            },
+                                                                                                                        error: function () {
+
+                                                                                                                        },
+                                                                                                                        });
+                                                                                                                    },
+                                                                                                                    abort: function () {
+                                                                                                                       $('#falha').css('visibility', 'visible');
+                                                                                                                    }
+                                                                                                                }); return false;">
+                    <!-- NÃO EDITE OS COMANDOS DAS LINHAS ABAIXO -->
+                    <input type="hidden" name="itemCode" value="18E08D4644440BEDD43E5FB02A3FBAEC" />
+                    <input type="hidden" name="iot" value="button" />
+                    <input type="image" src="https://stc.pagseguro.uol.com.br/public/img/botoes/pagamentos/209x48-pagar-azul-assina.gif" name="submit" alt="Pague com PagSeguro - é rápido, grátis e seguro!" />
+                </form>
+                <script type="text/javascript" src="https://stc.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.lightbox.js"></script>
+                <!-- FINAL FORMULARIO BOTAO PAGSEGURO -->
+            </div>
+
+
+        </div>
+        
+    </div>
+    <script type="text/javascript">
+            $("#pagDiario").bind('ajax:complete', function () {
+                alert("hehehe")
+            });
+
+            $('#divFreq').change(function () {
+                $("#divHorariosMensal").empty();
+                var diaSem = $('#diaSemanas option:selected').val()
+                var mes = $('#Meses option:selected').val()
+                 $.ajax({
+                    url: '@Url.Action("BuscarMesesHorariosDisponiveis", "Servicos")',
+                    dataType: 'JSON',
+                    data: { diaSemana: diaSem, mesAg: mes},
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        var row = "";
+                        row += '<label for="horariosMen">Horários Mensais Disponíveis</label></br >';
+                        row += ' <select id="horariosMen" name="horariosMen" class="form-control">'
+                        row += ' <option value=""></option>';
+                        $.each(data, function (index) {
+                            var dia = data[index].DiaSemana;
+                            row += ' <option value="' + dia + '">' + dia + '</option>';
+                        });
+                        row += '</select>';
+                        console.log(row)
+                        $("#divHorariosMensal").append(row);
+                        $('#salvarMensal').css("visibility", "visible");
+                        },
+                    error: function () {
+                        alert("sem sucesso");
+                    },
+                    });
+            });
+
+            $('#divSemanal').change(function () {
+                var diaSem = $('#diaSemanas option:selected').val()
+               $.ajax({
+                    url: '@Url.Action("BuscarMesesDisponiveis", "Servicos")',
+                    dataType: 'JSON',
+                    data: { diaSemana: diaSem},
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        var row = "";
+                        row += '<label for="frequencia" >Meses Disponíveis</label></br >';
+                        row += ' <select id="Meses" name="Meses" class="form-control">'
+                        row += ' <option value=""></option>';
+                        $.each(data, function (index) {
+                            var dia = data[index].DiaSemana;
+                            var mesExtenso = data[index].MesExtenso;
+                            row += ' <option value="' + dia + '">' + mesExtenso + '</option>';
+                        });
+                        row += '</select>';
+
+                        $("#divFreq").append(row);
+                        },
+                    error: function () {
+
+                    },
+                    });
+            });
+
+
+
+        function teste() {
+            var elem = document.getElementById('agendamentos');
+            elem.style.visibility = 'visible';
+            var id = $("#idColab").val();
+            $("#horariosDiarios").empty();
+            $.ajax({
+                    url: '@Url.Action("BuscarDiasDisponiveis", "Servicos")',
+                    dataType: 'JSON',
+                    data: { id: id, idEsp: @Session["servico"]},
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        var row = "";
+                        row += ' <select id="horariosDiarios" name="horariosDiarios" class="form-control">'
+                        row += ' <option value=""></option>';
+                        $.each(data, function (index) {
+                            var horario = data[index].DATAFORMATADA;
+                            var idHorario = data[index].ID;
+                            row += ' <option value="' + horario+'">' + horario + '</option>';
+                        });
+                        row += '</select>';
+
+                        $("#horariosDiarios").append(row);
+                        },
+                    error: function () {
+                        alert("sem sucesso");
+                    },
+                    });
+
+
+        }
+
+        $('#freq').change(function () {
+            var checkedValue = $("input[name='frequencia']:checked").val();
+
+            if (checkedValue == 'diaria') {
+
+                $("#divDt").css("visibility", "visible");
+                $('#divSemanal').css("visibility", "hidden");
+                $('#divFreq').css("visibility", "hidden");
+                $('#salvar').css("visibility", "hidden");
+                $('#divHorariosMensal').empty();
+
+            } else if (checkedValue == 'mensal')
+            {
+                var idColab = $("#idColab").val();
+
+                 $.ajax({
+                    url: '@Url.Action("BuscarDiaSemanaDisponiveis", "Servicos")',
+                    dataType: 'JSON',
+                    data: { id: idColab},
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        var row = "";
+                        row += '<label for="frequencia">Dia da Semana</label></br >';
+                        row += '<select id="diaSemanas" name="diaSemanas" class="form-control">';
+                        row += ' <option value="" selected></option>';
+                               $.each(data, function (index) {
+                                   var dia = data[index].DiaSemana;
+                                   row += ' <option value="' + dia + '">' + dia + '</option>';
+                               });
+
+                               row += '</select>';
+                               $("#divSemanal").append(row);
+                        },
+                    error: function () {
+                        alert("sem sucesso");
+                    },
+                });
+
+                $("#divSemanal").css("visibility", "visible");
+                $('#divDt').css("visibility", "hidden");
+                $('#divFreq').css("visibility", "visible");
+                $('#divHorariosMensal').css("visibility", "visible");
+                $('#salvar').css("visibility", "hidden");
+                $('#diaMod').empty();
+                $("#divSemanal").empty();
+            }
+            });
+
+            $('#horariosDiarios').change(function () {
+                var horarios = $('#horariosDiarios option:selected').val()
+                var id = $("#idColab").val();
+                $("#diaMod").empty();
+                $.ajax({
+                    url: '@Url.Action("BuscarHorariosDisponiveis", "Servicos")',
+                    dataType: 'JSON',
+                    data: { dia: horarios, idColab: id},
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+
+                        var row = "";
+                        row += '<label for="frequencia" style="max-width:45%;margin-left:4%;margin-top:17%">Frequência: </label>'
+                        row += ' <select id="horariosDiariosAg" name="horariosDiariosAg" class="form-control" style="margin-left:4%">'
+                        row += ' <option value=""></option>';
+
+                        $.each(data, function (index) {
+                            var horario = data[index].DATAFORMATADA;
+                            var idHorario = data[index].ID;
+                            row += ' <option value="' + horario+'">' + horario + '</option>';
+                        });
+                        row += '</select>';
+                        $("#diaMod").append(row);
+                        $('#salvar').css("visibility", "visible");
+
+                        },
+                    error: function () {
+
+
+                    },
+                });
+            });
+
+
+            @*$(document).ready(function () {
+                $(document).on("click", "#salvar", function () {
+                    var dia = $('#horariosDiarios option:selected').val();
+                    var horarios = $('#horariosDiariosAg option:selected').val();
+                    var idColaborador = $("#idColab").val();
+
+                    $.ajax({
+                    url: '@Url.Action("SalvaAgendamento", "Servicos")',
+                    dataType: 'JSON',
+                    data: { data: dia, horario: horarios, idColab: idColaborador},
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+
+                        },
+                    error: function () {
+
+                    },
+                    });
+                });
+            });*@
+
+
+            @*$(document).ready(function () {
+                $(document).on("click", "#salvarMensal", function () {
+                    var diaSem = $('#diaSemanas option:selected').val();
+                    var mes = $('#Meses option:selected').val();
+                    var horarios = $('#horariosMen option:selected').val();
+                    var idColaborador = $("#idColab").val();
+
+                    alert(diaSem);
+                    alert(mes);
+                    alert(horarios);
+                    $.ajax({
+                    url: '@Url.Action("SalvaAgendamentoMensal", "Servicos")',
+                    dataType: 'JSON',
+                    data: { data: diaSem, horario: horarios, mes: mes, idColab: idColaborador},
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+
+                        },
+                    error: function () {
+
+                    },
+                    });
+                });
+            });*@
+    </script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <style type="text/css">
+        body {
+            color: #404E67;
+            background: #F5F7FA;
+        }
+    </style>
+</head>
+<body>
+    <div id="image" style="position:center;margin-left:30%; margin-top:5%;margin-bottom:4%; width:40%;height:20%;background-color:#F5F7FA;">
+
+        <img src="~/Images/logoPlusSports.png" />
+    </div>
+    <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img class="d-block w-100" src="~/Images/FuncionalBanner.jpg" alt="First slide">
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-100" src="~/Images/corridaBanner.jpg" alt="Second slide">
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-100" src="~/Images/natacao.jpg" alt="Third slide">
+            </div>
+        </div>
+        <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+
+    <div id="sobre" style="background-color:#F5F7FA; margin-top:7%;">
+
+        Lorem ipsum vel sociosqu erat velit quam dictum rutrum, neque consectetur torquent lectus maecenas bibendum augue. justo elementum dui accumsan proin in a tristique sem iaculis lacus, senectus hac habitant euismod blandit rutrum id quisque interdum, aliquet magna nulla velit lorem iaculis tristique magna quisque. lectus venenatis curabitur mollis augue fusce convallis risus magna risus, cursus fusce proin habitasse tempus vehicula per purus, aliquam luctus rutrum tempus proin sollicitudin phasellus vestibulum. at quisque fermentum odio eros nisi etiam pulvinar malesuada sollicitudin, quam dolor pellentesque convallis scelerisque nostra fermentum volutpat vitae, dictumst diam vel dui est nec vel scelerisque.
+
+        Ut aliquam lacus at platea volutpat molestie varius justo augue hac ligula nisl, aliquam posuere vulputate lacus duis hendrerit nam aenean senectus auctor quam. est quisque tempus rhoncus aenean etiam netus nisi turpis vivamus, ultricies nulla fermentum aenean tempor curae rhoncus vel, accumsan torquent suspendisse sed potenti quisque porttitor praesent. erat purus cras augue vulputate habitasse aliquam mauris, eleifend dictum curabitur risus quisque nisl, hac mollis fermentum hendrerit sed habitasse. conubia adipiscing vel varius suspendisse sit orci eu adipiscing, fusce leo suspendisse curae pellentesque quis elit tellus, sem fames orci arcu quisque leo accumsan.
+    </div>
+
+
+</body>
+</html>

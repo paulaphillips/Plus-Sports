@@ -1,0 +1,902 @@
+﻿@model IEnumerable<personal.Models.CadastroHorarios>
+@{
+    ViewBag.Title = "Modalidades";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<html lang="en">
+<head>
+    <style type="text/css">
+        body {
+            color: #404E67;
+            background: #F5F7FA;
+        }
+    </style>
+
+    <link href="~/Content/bootstrap-datepicker.css" rel="stylesheet" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <script src="~/Scripts/bootstrap-datepicker.js"></script>
+    <script src="~/Scripts/bootstrap-datepicker.min.js"></script>
+
+</head>
+<body class="modalidades">
+    <div class="container col-md-8 col-md-offset-2 " style="margin-top:110PX; background:#ffffff">
+        <div id="addModal">
+            @*<button type="button" class="btn btn-info add-new" style="float: right; margin-top:30px;border-radius: 40px;">Adicionar</button>*@
+            <button type="button" style="float: right; margin-top:30px;" class="btn btn-primary add-new">Adicionar</button>
+        </div>
+        <div style="margin-top:33px;">
+            <h3>Serviços</h3>
+        </div>
+
+        @if (ViewBag.ItemData.Count == 0)
+    {
+        <h6>Nenhuma modalidade cadastrada para seu perfil</h6>
+}
+else
+{
+    <table id="tb" class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Esporte</th>
+                <th scope="col">Horários / Valores</th>
+                <th scope="col">Excluir</th>
+            </tr>
+        </thead>
+        @foreach (var item in ViewBag.ItemData)
+    {
+
+        <tbody>
+            <tr>
+                <td style="width:50%">
+
+                    <select class="form-control" id="sEsporte" name="sEsporte" style="width:50%">
+                        @if (item.ID_ESPORTE == 1)
+                    {
+                        <option value="1" selected>MUAY THAI</option>
+                }
+                else
+                {
+                    <option value="1">MUAY THAI</option>
+            }
+                        @if (item.ID_ESPORTE == 2)
+                    {
+                        <option value="2" selected>FUNCIONAL</option>
+                }
+                else
+                {
+                    <option value="2">FUNCIONAL</option>
+            }
+                        @if (item.ID_ESPORTE == 3)
+                    {
+                        <option value="3" selected>CORRIDA</option>
+                }
+                else
+                {
+                    <option value="3">CORRIDA</option>
+            }
+                        @if (item.ID_ESPORTE == 4)
+                    {
+                        <option value="4" selected>SLACKLINE</option>
+                }
+                else
+                {
+                    <option value="4">SLACKLINE</option>
+            }
+                        @if (item.ID_ESPORTE == 5)
+                    {
+                        <option value="5" selected>SURF</option>
+                }
+                else
+                {
+                    <option value="5">SURF</option>
+            }
+                        @if (item.ID_ESPORTE == 6)
+                    {
+                        <option value="6" selected>MUSCULAÇÃO</option>
+                }
+                else
+                {
+                    <option value="6">MUSCULAÇÃO</option>
+            }
+                    </select>
+
+                </td>
+                <td>
+                    <button id="btnAdd" class="btn btn-mini" title="Adicionar" style="background: #f9f9f9" data-toggle="modal" data-target="#ModalAdd">
+                        <i class="fa fa-plus" style="font-size: 20px; "></i>
+                    </button>
+                    <button id="btnHorarios" name="btnHorarios" class="btn btn-mini" title="Horarios" style="background: #f9f9f9" data-toggle="modal" data-target="#ModalHorarios">
+                        <i class="fas fa-clock" style="font-size: 20px; "></i>
+                    </button>
+                    <button id="btnMoney" name="btnMoney" class="btn btn-mini" title="MOney" style="background: #f9f9f9" data-toggle="modal" data-target="#ModalMoney">
+                        <i class="fas fa-dollar-sign" style="font-size: 20px; "></i>
+                    </button>
+                    <button id="btnHorariosSemanal" name="btnHorariosSemanal" class="btn btn-mini" title="HorariosSemanal" style="background: #f9f9f9" data-toggle="modal" data-target="#ModalAgendamentos">
+                        <i class="fas fa-calendar-alt" style="font-size: 20px; "></i>
+                    </button>
+                </td>
+                <td>
+                    <button id="btnExcluirMod" name="btnExcluirMod" class="btn btn-mini" title="Excluir Modalidade" style="background: #f9f9f9;">
+                        <i class="fas fa-trash-alt" style="font-size: 20px; "></i>
+                    </button>
+                </td>
+            </tr>
+
+        </tbody>
+
+}
+    </table>
+}
+        <div id="add_new"></div>
+        <button type="button" class="btn-link" data-toggle="modal" data-target="#ModalNovoEsporte" style="float:right"><h5>Solicitar esporte</h5></button>
+    </div>
+    <div class="modal fade" id="ModalHorarios" tabindex="-1" role="dialog" aria-labelledby="ModalHorarios" aria-hidden="true">
+        <form method="post" action="~/Servicos/NovaModalidade">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="float:right">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h5 class="modal-title" id="adicionarHorarios"><b>Horários cadastrados</b></h5>
+                    </div>
+                    <div id="horariosMod" name="horariosMod" class="modal-body">
+
+
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="modal fade" id="ModalMoney" tabindex="-1" role="dialog" aria-labelledby="ModalMoney" aria-hidden="true">
+        <form method="post" action="~/Servicos/NovaModalidade">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="float:right">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h5 class="modal-title" id="valores"><b>Valores</b></h5>
+
+
+                    </div>
+                    <div class="modal-body">
+                        <input class="form-control" type="hidden" id="esporte" name="esporte">
+                        <h4>Valor Diário: </h4>
+                        <input type="text" id="valorDiario" name="valorDiario" class="form-control" style="max-width:35%">
+                        <h4>Valor Mensal: </h4>
+                        <input type="text" id="valorMensal" name="valorMensal" class="form-control" style="max-width:35%">
+                        <input type="text" id="idColab" name="idColab" class="form-control" value="@Session["id"]" style="visibility:hidden">
+                        <input type="text" id="idEsporte" name="idEsporte" class="form-control" value="@Session["servico"] " style="visibility:hidden">
+                        <button type="button" id="bntSalvarValor" name="bntSalvarValor" class="btn btn-primary">Salvar</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="modal fade" id="ModalAgendamentos" tabindex="-1" role="dialog" aria-labelledby="ModalAgendamentos" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="float:right">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h5 class="modal-title" id="Agendamentos"><b>Agendamentos</b></h5>
+                </div>
+                <div class="modal-body" id="divAgen" style="margin-top:-8%">
+                    <div class="tab-content">
+                        <ul class="nav nav-tabs" style="margin-top:7%">
+                            <li class="active"><a data-toggle="tab" onclick="buscarSemana()" href="#divAgendamentos">Semanal</a></li>
+                            <li><a data-toggle="tab" onclick="buscar()" href="#conc">Todos</a></li>
+                        </ul>
+                        <div id="divAgendamentos" class="tab-pane fade in active">
+                            <input type="hidden" id="sEsporte" name="sEsporte" class="form-control" value="">
+
+
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="ModalNovoEsporte" tabindex="-1" role="dialog" aria-labelledby="ModalNovoEsporte" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="float:right">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h5 class="modal-title" id="Agendamentos"><b>Novo Serviço</b></h5>
+                </div>
+                <div class="modal-body" id="divAgen">
+                    <form action="~/Servicos/NovoEsporte">
+                        <div class="form-group">
+                            <label for="novoEsporte">Solicitação:</label>
+                            <input type="text" class="form-control" id="novoEsporte" name="novoEsporte">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                            <button type="submit" class="btn btn-primary">Salvar</button>
+                        </div>
+                    </form>
+                </div>
+               
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="ModalAdd" tabindex="-1" role="dialog" aria-labelledby="ModalAdd" aria-hidden="true">
+        <form method="post" action="~/Servicos/NovaModalidade">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content" style="height:100%">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="float:right">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h5 class="modal-title" id="adicionarHorarios"><b>Adicionar horários</b></h5>
+
+
+                    </div>
+                    <div class="modal-body">
+                        <div style="float:right" id="target">
+                            <button runat="server" id="btnRun" class="btn btn-mini" title="Adicionar" style="background: #ffffff" data-toggle="modal" data-target="#ModalAdd">
+                                <i class="fa fa-plus" style="font-size: 10px; "></i>
+                            </button>
+                            <input type="text" id="indice" value="1" hidden>
+                        </div>
+                        <input class="form-control" type="hidden" id="esporte" name="esporte" value="">
+                        <div id="freq">
+                            <label for="frequencia" style="max-width:45%;margin-left:4%">Frequência: </label>
+                            <input type="radio" name="frequencia" id="frequencia" value="diaria" style="margin-top:12px;margin-left:4%" checked>Diária</input>
+                            <input type="radio" name="frequencia" id="frequencia" value="mensal" style="margin-left:4%">Mensal</input>
+                        </div>
+                        <div class="container" style="margin-top:3%">
+                            <div id="divDt" class="col-sm-6" style="height:130px;visibility: visible">
+                                <label for="Data" style="max-width:45%">Data</label>
+                                <div class="input-group date" data-provide="datepicker" ">
+                                    <input type="text" class="form-control" name="data" id="data">
+                                    <div class="input-group-addon">
+                                        <span class="glyphicon glyphicon-th"></span>
+                                    </div>
+                                    <input type="text" id="diaSemana" value="" hidden />
+                                </div>
+                            </div>
+                            <div id="divSemanal" style="display:inline-block;visibility: hidden;margin-left:-100%">
+                                <label for="frequencia" style="max-width:85%;margin-left:25%">Dia da semana</label></br>
+                                <select id="diaSemana" name="diaSemana" class="form-control" style="margin-left:20%" value="null">
+                                    <option value="blank" selected> </option>
+                                    <option value="segunda-feira">Segunda-feira</option>
+                                    <option value="terça-feira">Terça-feira</option>
+                                    <option value="quarta-feira">Quarta-feira</option>
+                                    <option value="quinta-feira">Quinta-feira</option>
+                                    <option value="sexta-feira">Sexta-feira</option>
+                                    <option value="sábado">Sábado</option>
+                                    <option value="domingo">Domingo</option>
+
+                                </select>
+                            </div>
+                            <div id="divFreq" style="float:left;width:45%;visibility: hidden">
+                                <div id="mesesFreq" style="display:inline-block;">
+                                    <label for="frequencia" style="max-width:45%;margin-left:25%">Meses</label></br>
+                                    <select id="meses" name="meses" class="form-control" style="margin-left:20%">
+                                        <option value="0" selected> </option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                            <div style="float:right;visibility: visible">
+                                <button id="btnColapse" type="button" title="Adicionar" style="background: #ffffff; margin-left:100%" data-toggle="collapse" data-target="#demo">
+                                    <i class="fas fa-angle-down" style="font-size: 20px; "></i>
+                                </button>
+                            </div>
+
+
+                        </div>
+                        <div id="demo" class="collapse">
+                            <div class=" col-sm-3">
+                                <input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="00:00">
+                                <label class="form-check-label" for="horarios">
+                                    00:00
+                                </label></br>
+                                <input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="01:00">
+                                <label class="form-check-label" for="horarios">
+                                    01:00
+                                </label></br>
+                                <input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="02:00">
+                                <label class="form-check-label" for="horarios">
+                                    02:00
+                                </label></br>
+                                <input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="03:00">
+                                <label class="form-check-label" for="horarios">
+                                    03:00
+                                </label></br>
+                                <input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="04:00">
+                                <label class="form-check-label" for="horarios">
+                                    04:00
+                                </label></br>
+                                <input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="05:00">
+                                <label class="form-check-label" for="horarios">
+                                    05:00
+                                </label></br>
+                            </div>
+                            <div class=" col-sm-3">
+                                <input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="06:00">
+                                <label class="form-check-label" for="gridCheck1">
+                                    06:00
+                                </label></br>
+                                <input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="07:00">
+                                <label class="form-check-label" for="gridCheck1">
+                                    07:00
+                                </label></br>
+                                <input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="08:00">
+                                <label class="form-check-label" for="gridCheck1">
+                                    08:00
+                                </label></br>
+                                <input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="09:00">
+                                <label class="form-check-label" for="gridCheck1">
+                                    09:00
+                                </label></br>
+                                <input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="10:00">
+                                <label class="form-check-label" for="gridCheck1">
+                                    10:00
+                                </label></br>
+                                <input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="11:00">
+                                <label class="form-check-label" for="gridCheck1">
+                                    11:00
+                                </label></br>
+                            </div>
+                            <div class=" col-sm-3">
+                                <input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="12:00">
+                                <label class="form-check-label" for="gridCheck1">
+                                    12:00
+                                </label></br>
+                                <input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="13:00">
+                                <label class="form-check-label" for="gridCheck1">
+                                    13:00
+                                </label></br>
+                                <input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="14:00">
+                                <label class="form-check-label" for="gridCheck1">
+                                    14:00
+                                </label></br>
+                                <input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="15:00">
+                                <label class="form-check-label" for="gridCheck1">
+                                    15:00
+                                </label></br>
+                                <input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="16:00">
+                                <label class="form-check-label" for="gridCheck1">
+                                    16:00
+                                </label></br>
+                                <input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="17:00">
+                                <label class="form-check-label" for="gridCheck1">
+                                    17:00
+                                </label></br>
+                            </div>
+                            <div class=" col-sm-3">
+                                <input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="18:00">
+                                <label class="form-check-label" for="gridCheck1">
+                                    18:00
+                                </label></br>
+                                <input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="19:00">
+                                <label class="form-check-label" for="gridCheck1">
+                                    19:00
+                                </label></br>
+                                <input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="20:00">
+                                <label class="form-check-label" for="gridCheck1">
+                                    20:00
+                                </label></br>
+                                <input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="21:00">
+                                <label class="form-check-label" for="gridCheck1">
+                                    21:00
+                                </label></br>
+                                <input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="22:00">
+                                <label class="form-check-label" for="gridCheck1">
+                                    22:00
+                                </label></br>
+                                <input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="23:00">
+                                <label class="form-check-label" for="gridCheck1">
+                                    23:00
+                                </label></br>
+                                <input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="end" checked hidden>
+                            </div>
+                        </div>
+
+                    </div> 
+                    
+                    <div id="teste"></div>
+                    <div style="margin-left:75%;margin-bottom:3%">
+                        
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                    </div>
+                </div>
+                
+            </div>
+        </form>
+    </div>
+
+    <script type="text/javascript">
+        function novoEsporte() {
+            
+        }
+        function buscarSemana() {
+            var idEsporteInp = $('#sEsporte').val();
+            var idColabInp = $('#idColab').val();
+            $('#divAgendamentos').empty();
+            $('#divAgendamentos').empty();
+                $.ajax({
+                    url: '@Url.Action("HorariosDaSemana", "Servicos")',
+                    dataType: 'JSON',
+                    data: { idColab: idColabInp, idEsporte: idEsporteInp},
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        row = "";
+                           row+='<table class="table table-striped">'+
+                             '<thead>'+
+                             '<tr>'+
+                                    '<th scope="col">Data</th>'+
+                                    '<th scope="col">Esporte</th>'+
+                                    '<th scope="col">Aluno</th>'+
+
+                             '</tr>'+
+                             '</thead>'+
+                             '<tbody>';
+
+                        $.each(data, function (index) {
+                            var esporte = data[index].DS_ESPORTE;
+                            var dataAgendada = data[index].DATAFORMATADA;
+                            var colaborador = data[index].DS_COLABORADOR;
+                            row += '<tr>' +
+                                '<td>' + dataAgendada+'</td>' +
+                                '<td>'+esporte+'</td>' +
+                                '<td>' + colaborador+'</td>' +
+                                '</tr>';
+                        });
+                        row += '</table >'+
+                               '</tbody>';
+                        $("#divAgendamentos").append(row);
+                    },
+                    error: function () {
+
+                    }
+                    });
+        }
+
+        function buscar() {
+            var idEsporteInp = $('#sEsporte').val();
+            var idColabInp = $('#idColab').val();
+            $('#divAgendamentos').empty();
+            $.ajax({
+                    url: '@Url.Action("HorariosFuturos", "Servicos")',
+                    dataType: 'JSON',
+                    data: { idColab: idColabInp, idEsporte: idEsporteInp},
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        row = "";
+                           row+='<table class="table table-striped">'+
+                             '<thead>'+
+                             '<tr>'+
+                                    '<th scope="col">Data</th>'+
+                                    '<th scope="col">Esporte</th>'+
+                                    '<th scope="col">Aluno</th>'+
+
+                             '</tr>'+
+                             '</thead>'+
+                             '<tbody>';
+
+                        $.each(data, function (index) {
+                            var esporte = data[index].DS_ESPORTE;
+                            var dataAgendada = data[index].DATAFORMATADA;
+                            var colaborador = data[index].DS_COLABORADOR;
+                            row += '<tr>' +
+                                '<td>' + dataAgendada+'</td>' +
+                                '<td>'+esporte+'</td>' +
+                                '<td>' + colaborador+'</td>' +
+                                '</tr>';
+                        });
+                        row += '</table >'+
+                               '</tbody>';
+                        console.log(row);
+                        $("#divAgendamentos").append(row);
+                    },
+                    error: function () {
+
+                    }
+                    });
+
+        }
+
+        $(document).ready(function () {
+            $(document).on("click", "#btnHorariosSemanal", function () {
+                var idEsporteInp = 0;
+                var idColabInp = $('#idColab').val();
+                $(this).closest('tr').find('td').each(
+                    function () {
+                        idEsporteInp = $(this).closest('tr').find('#sEsporte').val();
+                    },
+                );
+                $('#sEsporte').val(idEsporteInp);
+
+                $('#divAgendamentos').empty();
+                $.ajax({
+                    url: '@Url.Action("HorariosDaSemana", "Servicos")',
+                    dataType: 'JSON',
+                    data: { idColab: idColabInp, idEsporte: idEsporteInp},
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        row = "";
+                           row+='<table class="table table-striped">'+
+                             '<thead>'+
+                             '<tr>'+
+                                    '<th scope="col">Data</th>'+
+                                    '<th scope="col">Esporte</th>'+
+                                    '<th scope="col">Aluno</th>'+
+
+                             '</tr>'+
+                             '</thead>'+
+                             '<tbody>';
+
+                        $.each(data, function (index) {
+                            var esporte = data[index].DS_ESPORTE;
+                            var dataAgendada = data[index].DATAFORMATADA;
+                            var colaborador = data[index].DS_COLABORADOR;
+                            row += '<tr>' +
+                                '<td>' + dataAgendada+'</td>' +
+                                '<td>'+esporte+'</td>' +
+                                '<td>' + colaborador+'</td>' +
+                                '</tr>';
+                        });
+                        row += '</table >'+
+                               '</tbody>';
+                        console.log(row);
+                        $("#divAgendamentos").append(row);
+                    },
+                    error: function () {
+
+                    }
+                    });
+            });
+        });
+
+
+        $(document).ready(function () {
+            $(document).on("click", "#bntSalvarValor", function () {
+                var idColabInp = $('#idColab').val();
+                var idEsporteInp = $('#esporte').val();
+
+                var valorMensalInp = $('#valorMensal').val();
+                var valorDiarioInp = $('#valorDiario').val();
+
+                $.ajax({
+                    url: '@Url.Action("SalvarValores", "Servicos")',
+                    dataType: 'JSON',
+                    data: { valorDiario: valorDiarioInp, valorMensal: valorMensalInp, idColab: idColabInp, idEsporte: idEsporteInp},
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+
+                    },
+                    error: function () {
+
+                    }
+                    });
+                $('#ModalMoney').modal('toggle');
+            });
+        });
+
+
+        $(document).ready(function () {
+            $(document).on("click", "#btnMoney", function () {
+
+                var idEsporteInp = 0;
+                $(this).closest('tr').find('td').each(
+                    function () {
+                        idEsporteInp = $(this).closest('tr').find('#sEsporte').val();
+                    },
+                );
+                $(".modal-body #esporte").val(idEsporteInp);
+
+            });
+        });
+
+           $(document).ready(function () {
+               $(document).on("click", "#btnAdd", function () {
+
+                    var idEsporteInp = 0;
+                    $(this).closest('tr').find('td').each(
+                        function () {
+                            idEsporteInp = $(this).closest('tr').find('#sEsporte').val();
+                        },
+                    );
+
+                    $(".modal-body #esporte").val(idEsporteInp);
+                    
+
+                });
+            });
+            $(document).ready(function () {
+                $(document).on("click", "#btnExcluirMod", function () {
+                    var idEsporteInp = 0;
+                    $(this).closest('tr').find('td').each(
+                        function () {
+                            idEsporteInp = $(this).closest('tr').find('#sEsporte').val();
+                        },
+                    );
+                    $.ajax({
+                    url: '@Url.Action("ExcluirModalidade", "Home")',
+                    dataType: 'JSON',
+                    data: { esportes: idEsporteInp},
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                      
+                    },
+                    error: function () {
+
+                    }
+                    });
+                    location.reload(true);
+                });
+            });
+            $(document).ready(function () {
+                $(document).on("click", "#excluir", function () {
+                    var sThisVal = "";
+                    $('input.teste:checkbox:checked').each(function () {
+                        sThisVal += $(this).val();
+                        sThisVal += ",";
+                    });
+
+
+                        $.ajax({
+                        url: '@Url.Action("ExcluirHorarios", "Home")',
+                        dataType: 'JSON',
+                        data: { ids: sThisVal},
+                        contentType: "application/json; charset=utf-8",
+                        success: function (data) {
+
+                        },
+                        error: function () {
+
+                        }
+                        });
+                });
+            });
+            $("#target").click(function () {
+
+                var ind = $('#indice').val();
+                $('#indice').val(ind + 1);
+                var row = "";
+                row += '<input class="form-control" type="hidden" id="esporte" name="esporte" value="">' +
+                    '<input class="form-control" type="hidden" id="frequencia" name="frequencia" value="">'+
+                    '<div id="freqs' + ind + '">' +
+                    '<label for="frequencia' + ind + '" style="max-width:45%;margin-left:4%">Frequência: </label>' +
+                    '<label for="frequencia' + ind + '" style="max-width:85%;margin-left:25%">Dia da semana</label></br>' +
+                    '<input type="radio" name="frequencia' + ind + '" id="frequencia" onclick="myFunction(' + ind + ')" value="diaria" style="margin-top:12px;margin-left:4%" checked>Diária</input>' +
+                    '<input type="radio" name="frequencia' + ind + '" id="frequencia"  onclick="myFunction(' + ind + ')" value="mensal" style="margin-left:4%">Mensal</input>' +
+                    '</div >' +
+                    '<div class="container" style="margin-top:3%">' +
+                    '<div id="divDt' + ind + '" class="col-sm-6" style="height:130px;visibility: visible">' +
+                    '<label for="Data" style="max-width:45%">Data</label>' +
+                    '<div class="input-group date" data-provide="datepicker" ">' +
+                    '<input type="text" class="form-control" name="data" id="data">' +
+                    '<div class="input-group-addon">' +
+                    '<span class="glyphicon glyphicon-th"></span>' +
+                    '</div>' +
+                    '<input type="text" id="diaSemana" value="" hidden />' +
+                    '</div>' +
+                    '</div>' +
+                    '<div id="divSemanal' + ind + '" style="display:inline-block;visibility: hidden">' +
+                    '<label for="frequencia" style="max-width:85%;margin-left:25%">Dia da semana</label></br>' +
+                    '<select id="diaSemana" name="diaSemana" class="form-control" style="margin-left:20%" value="null">' +
+
+                    '<option value="blank" selected> </option>' +
+                    '<option value="segunda-feira">Segunda-feira</option>' +
+                    '<option value="terça-feira">Terça-feira</option>' +
+                    '<option value="quarta-feira">Quarta-feira</option>' +
+                    '<option value="quinta-feira">Quinta-feira</option>' +
+                    '<option value="sexta-feira">Sexta-feira</option>' +
+                    '<option value="sábado">Sábado</option>' +
+                    '<option value="domingo">Domingo</option>' +
+                    '</select>' +
+                    '</div>' +
+                    '<div id="divFreq' + ind + '" style="float:left;width:45%;visibility: hidden">' +
+                    '<div id="mesesFreq" style="display:inline-block;">' +
+                    '<label for="frequencia" style="max-width:45%;margin-left:25%">Meses</label></br>' +
+                    '<select id="meses" name="meses" class="form-control" style="margin-left:20%">' +
+                    '<option value="0" selected> </option>' +
+                    '<option value="1">1</option>' +
+                    '<option value="2">2</option>' +
+                    '<option value="3">3</option>' +
+                    '<option value="4">4</option>' +
+                    '<option value="5">5</option>' +
+                    '<option value="6">6</option>' +
+                    '<option value="7">7</option>' +
+                    '<option value="8">8</option>' +
+                    '<option value="9">9</option>' +
+                    '<option value="10">10</option>' +
+                    '<option value="11">11</option>' +
+                    '<option value="12">12</option>' +
+                    '</select>' +
+                    '</div>' +
+                    '<div style="float:right;visibility: visible">' +
+                    '<button id="btnColapse" type="button" title="Adicionar" style="background: #ffffff; margin-left:100%" data-toggle="collapse" data-target="#demo' + ind + '">' +
+                    '<i class="fas fa-angle-down" style="font-size: 20px; "></i>' +
+                    '</button>' +
+                    '</div>' +
+                    '</div >' +
+                    '</div >' +
+                    '<div id="demo' + ind + '" class="collapse">' +
+                    '<div class=" col-sm-3">' +
+                    '<input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="00:00">' +
+                    '<label class="form-check-label" for="gridCheck1">00:00</label></br>' +
+                    '<input class="form-check-input" type= "checkbox" name="horarios" id="horarios" value="01:00"> ' +
+                    '<label class="form-check-label" for="gridCheck1">01:00</label></br > ' +
+                    '<input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="02:00">' +
+                    '<label class="form-check-label" for="gridCheck1">02:00</label></br>' +
+                    '<input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="03:00">' +
+                    '<label class="form-check-label" for="gridCheck1">03:00</label></br>' +
+                    '<input class="form-check-input" type="checkbox"  name="horarios" id="horarios" value="04:00">' +
+                    '<label class="form-check-label" for="gridCheck1">04:00</label></br>' +
+                    '<input class="form-check-input" type="checkbox"  name="horarios" id="horarios" value="05:00">' +
+                    '<label class="form-check-label" for="gridCheck1">05:00</label></br>' +
+                    '</div > ' +
+                    '<div class=" col-sm-3">' +
+                    '<input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="06:00">' +
+                    '<label class="form-check-label" for="gridCheck1">06:00</label></br>' +
+                    '<input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="07:00">' +
+                    '<label class="form-check-label" for="gridCheck1">07:00</label></br>' +
+                    '<input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="08:00"">' +
+                    '<label class="form-check-label" for="gridCheck1">08:00</label></br>' +
+                    '<input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="09:00">' +
+                    '<label class="form-check-label" for="gridCheck1">09:00</label></br>' +
+                    '<input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="10:00">' +
+                    '<label class="form-check-label" for="gridCheck1">10:00</label></br>' +
+                    '<input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="11:00">' +
+                    '<label class="form-check-label" for="gridCheck1">11:00</label></br>' +
+                    '</div > ' +
+                    '<div class=" col-sm-3">' +
+                    '<input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="12:00">' +
+                    '<label class="form-check-label" for="gridCheck1">12:00</label></br>' +
+                    '<input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="13:00">' +
+                    '<label class="form-check-label" for="gridCheck1">13:00</label></br>' +
+                    '<input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="14:00">' +
+                    '<label class="form-check-label" for="gridCheck1">14:00</label></br>' +
+                    '<input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="15:00">' +
+                    '<label class="form-check-label" for="gridCheck1">15:00</label></br>' +
+                    '<input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="16:00">' +
+                    '<label class="form-check-label" for="gridCheck1">16:00</label></br>' +
+                    '<input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="17:00">' +
+                    '<label class="form-check-label" for="gridCheck1"> 17:00 </label ></br > ' +
+                    '</div>' +
+                    '<div class=" col-sm-3">' +
+                    '<input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="18:00">' +
+                    '<label class="form-check-label" for="gridCheck1">18:00</label ></br > ' +
+                    '<input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="19:00">' +
+                    '<label class="form-check-label" for="gridCheck1">19:00</label ></br > ' +
+                    '<input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="20:00">' +
+                    '<label class="form-check-label" for="gridCheck1">20:00</label ></br > ' +
+                    '<input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="21:00">' +
+                    '<label class="form-check-label" for="gridCheck1">21:00</label ></br > ' +
+                    '<input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="22:00">' +
+                    '<label class="form-check-label" for="gridCheck1">22:00</label ></br > ' +
+                    '<input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="23:00">' +
+                    '<label class="form-check-label" for="gridCheck1">23:00</label></br>' +
+                    '<input class="form-check-input" type="checkbox" name="horarios" id="horarios" value="end" checked hidden>' +
+                    '</div>' +
+                    ' </div>';
+
+
+                $("#teste").append(row);
+            });
+            $(document).ready(function () {
+                $(document).on("click", "#btnHorarios", function () {
+                    $("#horariosMod").empty();
+                    var idEsporteInp = 0;
+                    $(this).closest('tr').find('td').each(
+                        function () {
+                            idEsporteInp = $(this).closest('tr').find('#sEsporte').val();
+                        },
+                    );
+                    $.ajax({
+                    url: '@Url.Action("Horarios", "Home")',
+                    dataType: 'JSON',
+                    data: { id: idEsporteInp},
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        $.each(data, function (index) {
+                            var row = "";
+                            var horario = data[index].DATAFORMATADA;
+                            var id = data[index].ID;
+                            row += '<input type="checkbox" class="form-check-input teste" style="margin-right:2%" id="' + id + '" name="' + id + '"value="' + id +'">' +
+                                '<label for="validationCustom04">'+ horario+'</label><br>';
+                            $("#horariosMod").append(row);
+
+                        });
+                        row = '<button type="button" id="excluir" name="excluir" class="btn btn-primary">Excluir Selecionados</button>';
+                        $("#horariosMod").append(row);
+                    },
+                    error: function () {
+
+                    }
+                    });
+                });
+            });
+
+            $(document).on("click", ".add", function () {
+                var empty = false;
+                var input = $(this).parents("tr").find('input[type="text"]');
+                input.each(function () {
+                    if (!$(this).val()) {
+                        $(this).addClass("error");
+                        empty = true;
+                    } else {
+                        $(this).removeClass("error");
+                    }
+                });
+                $(this).parents("tr").find(".error").first().focus();
+                if (!empty) {
+                    input.each(function () {
+                        $(this).parent("td").html($(this).val());
+                    });
+                    $(this).parents("tr").find(".add, .edit").toggle();
+                    $(".add-new").removeAttr("disabled");
+                }
+            });
+
+
+            $('#freq').change(function () {
+                var checkedValue = $("input[name='frequencia']:checked").val();
+
+                if (checkedValue == 'diaria') {
+
+                    $('#divDt').css("visibility", "visible");
+                    $('#divSemanal').css("visibility", "hidden");
+                    $('#divFreq').css("visibility", "hidden");
+
+                } else if (checkedValue == 'mensal') {
+                    $('#divSemanal').css("visibility", "visible");
+                    $('#divDt').css("visibility", "hidden");
+                    $('#divFreq').css("visibility", "visible");
+                }
+            });
+
+            function myFunction(ind) {
+                var checkedValue = $("input[name='frequencia" + ind + "']:checked").val();
+                document.getElementById("frequencia").value = checkedValue;
+
+                var nomeDivSemanal = "#divSemanal" + ind;
+                var nomeDivDiaria = "#divDt" + ind;
+                var nomeDivFreq = "#divFreq" + ind;
+
+
+                if (checkedValue == 'diaria') {
+
+                    $("#divDt" + ind).css("visibility", "visible");
+                    $("#divSemanal" + ind).css("visibility", "hidden");
+                    $(nomeDivFreq).css("visibility", "hidden");
+
+                } else if (checkedValue == 'mensal') {
+
+                    $(''+nomeDivSemanal+'').css("visibility", "visible");
+                    $(''+nomeDivDiaria+'').css("visibility", "hidden");
+                    $('' + nomeDivFreq+'').css("visibility", "visible");
+                }
+            }
+
+    </script>
+</body>
+</html>

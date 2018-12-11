@@ -1,0 +1,335 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="~/lib/jQuery-Mask-Plugin-master/src/jquery.mask.js" type="text/javascript" asp-append-version="true"></script>
+    <link href="https://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <style type="text/css">
+
+        /****** Style Star Rating Widget *****/
+
+        .rating {
+            border: none;
+            float: left;
+        }
+
+            .rating > input {
+                display: none;
+            }
+
+            .rating > label:before {
+                margin: 5px;
+                font-size: 1.25em;
+                font-family: FontAwesome;
+                display: inline-block;
+                content: "\f005";
+            }
+
+            .rating > .half:before {
+                content: "\f089";
+                position: absolute;
+            }
+
+            .rating > label {
+                color: #ddd;
+                float: right;
+            }
+
+            /***** CSS Magic to Highlight Stars on Hover *****/
+
+            .rating > input:checked ~ label, /* show gold star when clicked */
+            .rating:not(:checked) > label:hover, /* hover current star */
+            .rating:not(:checked) > label:hover ~ label {
+                color: #FFD700;
+            }
+                /* hover previous stars in list */
+
+                .rating > input:checked + label:hover, /* hover current star when changing rating */
+                .rating > input:checked ~ label:hover,
+                .rating > label:hover ~ input:checked ~ label, /* lighten current selection */
+                .rating > input:checked ~ label:hover ~ label {
+                    color: #FFED85;
+                }
+    </style>
+</head>
+<body>
+    <div class="row col-md-8  col-md-offset-2 " style="margin-top:7%">
+        <div class="col-8 col-sm-4">
+            <div class="list-group" id="precos">
+                <a class="list-group-item list-group-item-action flex-column align-items-start active">
+                    <h4>Preços</h4>
+                    <input type="radio" name="precos" id="precos" value="todos" checked> Todos<br>
+                    <input type="radio" name="precos" id="precos" value="cresc"> Ordem Crescente<br>
+                </a>
+            </div>
+            <div class="list-group" id="formacao">
+                <a class="list-group-item list-group-item-action flex-column align-items-start active">
+                    <h4>Formação</h4>
+                    <input type="radio" name="formacao" id="formacao" value="0" checked> Todos<br>
+                    <input type="radio" name="formacao" id="formacao" value="1"> Licenciatura<br>
+                    <input type="radio" name="formacao" id="formacao" value="2"> Bacharelado<br>
+                    <input type="radio" name="formacao" id="formacao" value="3"> Pós-Graduação<br>
+                    <input type="radio" name="formacao" id="formacao" value="4"> Mestrado<br>
+                    <input type="radio" name="formacao" id="formacao" value="5"> Doutorado<br>
+                </a>
+            </div>
+            <div class="list-group">
+                <a class="list-group-item list-group-item-action flex-column align-items-start active">
+                    <h4>Desconto</h4>
+                    <input type="radio" name="desconto" id="desconto" value="todos" checked> Todos<br>
+                    <input type="radio" name="desconto" id="desconto" value="todos"> Com desconto<br>
+                </a>
+            </div>
+            <div class="list-group">
+                <a class="list-group-item list-group-item-action flex-column align-items-start active">
+                    <h4>Avaliações</h4>
+                    <input type="radio" name="avaliacao" id="avaliacao" checked> Todos<br>
+                    <input type="radio" name="avaliacao" id="avaliacao"> Melhor Avaliado<br>
+                </a>
+            </div>
+            
+        </div>
+        <div id="init" style="margin-top:-5%">
+
+            <h5 style="margin-top:5%">@ViewBag.Message</h5>
+
+            @foreach (var item in ViewBag.ItemData)
+            {
+
+                <div class="col-6 col-sm-8" style="margin-top:0%">
+                    <div class="list-group">
+                        <div class="d-flex w-100 justify-content-between " style="float:left;margin-right:3%; position:relative">
+                            <div class="list-group-item list-group-item-action flex-column align-items-start active">
+                                <img src="@Url.Content("~/FileUpload/" + item.IMAGE_NAME)" class="img-rounded float-left imagemPersonal" style="width:180px;height:200px" alt="teste">
+                                <div id="stars" style="float:right;">
+                                    <fieldset class="rating">
+                                        @if (item.RATING_STARS == "5,00")
+                                        {
+                                            <input type="radio" id="star5" name="rating" value="5" disabled checked /><label class="full" for="star5" title="Awesome - 5 stars"></label>
+                                        }
+                                        else
+                                        {
+                                            <input type="radio" id="star5" name="rating" value="5" disabled /><label class="full" for="star5" title="Awesome - 5 stars"></label>
+                                        }
+                                        @if (item.RATING_STARS == "4,50")
+                                        {
+                                            <input type="radio" id="star4half" name="rating" value="4 and a half" disabled checked /><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
+                                        }
+                                        else
+                                        {
+                                            <input type="radio" id="star4half" name="rating" value="4 and a half" disabled /><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
+                                        }
+                                        @if (item.RATING_STARS == "4,00")
+                                        {
+                                            <input type="radio" id="star4" name="rating" value="4" disabled checked /><label class="full" for="star4" title="Pretty good - 4 stars"></label>
+                                        }
+                                        else
+                                        {
+                                            <input type="radio" id="star4" name="rating" value="4" disabled /><label class="full" for="star4" title="Pretty good - 4 stars"></label>
+                                        }
+                                        @if (item.RATING_STARS == "3,50")
+                                        {
+                                            <input type="radio" id="star3half" name="rating" value="3 and a half" disabled checked /><label class="half" for="star3half" title="Meh - 3.5 stars"></label>
+                                        }
+                                        else
+                                        {
+                                            <input type="radio" id="star3half" name="rating" value="3 and a half" disabled /><label class="half" for="star3half" title="Meh - 3.5 stars"></label>
+                                        }
+                                        @if (item.RATING_STARS == "3,00")
+                                        {
+                                            <input type="radio" id="star3" name="rating" value="3" disabled checked /><label class="full" for="star3" title="Meh - 3 stars"></label>
+                                        }
+                                        else
+                                        {
+                                            <input type="radio" id="star3" name="rating" value="3" disabled /><label class="full" for="star3" title="Meh - 3 stars"></label>
+                                        }
+                                        @if (item.RATING_STARS == "2,50")
+                                        {
+                                            <input type="radio" id="star2half" name="rating" value="2 and a half" disabled checked /><label class="half" for="star2half" title="Kinda bad - 2.5 stars"></label>
+                                        }
+                                        else
+                                        {
+                                            <input type="radio" id="star2half" name="rating" value="2 and a half" disabled /><label class="half" for="star2half" title="Kinda bad - 2.5 stars"></label>
+                                        }
+                                        @if (item.RATING_STARS == "2,00")
+                                        {
+                                            <input type="radio" id="star2" name="rating" value="2" disabled checked /><label class="full" for="star2" title="Kinda bad - 2 stars"></label>
+                                        }
+                                        else
+                                        {
+                                            <input type="radio" id="star2" name="rating" value="2" disabled /><label class="full" for="star2" title="Kinda bad - 2 stars"></label>
+                                        }
+                                        @if (item.RATING_STARS == "1,50")
+                                        {
+                                            <input type="radio" id="star1half" name="rating" value="1 and a half" disabled checked /><label class="half" for="star1half" title="Meh - 1.5 stars"></label>
+                                        }
+                                        else
+                                        {
+                                            <input type="radio" id="star1half" name="rating" value="1 and a half" disabled /><label class="half" for="star1half" title="Meh - 1.5 stars"></label>
+                                        }
+                                        @if (item.RATING_STARS == "1,00")
+                                        {
+                                            <input type="radio" id="star1" name="rating" value="1" disabled checked /><label class="full" for="star1" title="Sucks big time - 1 star"></label>
+                                        }
+                                        else
+                                        {
+                                            <input type="radio" id="star1" name="rating" value="1" disabled /><label class="full" for="star1" title="Sucks big time - 1 star"></label>
+                                        }
+                                        @if (item.RATING_STARS == "0,50")
+                                        {
+                                            <input type="radio" id="starhalf" name="rating" value="half" disabled checked /><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
+                                        }
+                                        else
+                                        {
+                                            <input type="radio" id="starhalf" name="rating" value="half" disabled /><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
+                                        }
+                                    </fieldset>
+                                </div>
+                                <div id="conteudo" style="margin-top:13%">
+                                    <h3>@item.NOME</h3>
+                                    <div id="desc">
+                                        <p class="mb-1" maxlength="10">
+                                            @item.SOBRE
+                                            @item.ID_COLABORADOR
+                                        </p>
+
+                                        <button type="button" id="saibaMais" class="btn btn-secondary btn-sm pull-right" onclick="saibaMais(@item.ID_COLABORADOR)">Saiba mais</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div id="filtro"></div>
+
+    </div>
+
+    <style>
+
+        .list-group-item img {
+            float: left;
+            margin-right: 15px;
+        }
+
+        .list-group-item::after {
+            content: "";
+            display: inline-block;
+            width: 100%;
+        }
+    </style>
+
+    <script type="text/javascript">
+                function teste(vlr) {
+                    alert(vlr);
+                }
+
+
+            function saibaMais(id) {
+                    window.location.replace("/Servicos/SaibaMais/" + id);
+            }
+
+           $(document).ready(function () {
+                $('#precos').change(function () {
+                    selected_value = $("input[name='precos']:checked").val();
+                    var row = "";
+                    var path = '@Url.Content("~/FileUpload/")';
+
+                    $("#filtro").load(location.href + " #filtro>*", "");
+                    $.ajax({
+                    url: '@Url.Action("Precos", "Filtro")',
+                    dataType: 'JSON',
+                    data: { name: selected_value, servico: @Session["servico"] },
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        $.each(data, function (index) {
+                            var id = data[index].ID_COLABORADOR;
+                            let imageName = data[index].IMAGE_NAME;
+                            let imagePath = path + imageName;
+
+                            row += '<div class="col-6 col-sm-8">' +
+                                '<div class="list-group">' +
+                                '<div class="d-flex w-100 justify-content-between " style="float:left;margin-right:3%; position:relative">' +
+                                '<div class="list-group-item list-group-item-action flex-column align-items-start active">' +
+                                '<img src="' + imagePath + '" class="img-rounded float-left" style="width:180px;height:200px" alt="teste">' +
+                                '<h3>' + this.NOME + '</h3>' +
+                                '<div id="desc">' +
+                                '<p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>' +
+                                '<small>Donec id elit non mi porta.</small>' +
+                                '<button type="button" id="saibaMais" class="btn btn-secondary btn-sm pull-right" onclick="saibaMais(' + id + ')>Saiba mais</button>' +
+                                '</div>' +
+                                '</div>' +
+                                '</div>' +
+                                ' </div>' +
+                                ' </div>';
+                        });
+                        $('#init').hide();
+                        $("#filtro").html(row);
+                    },
+                    error: function () {
+                        alert("sem sucesso");
+                    }
+                    });
+               });
+           });
+
+            $(document).ready(function () {
+                $('#formacao').change(function () {
+                    selected_value = $("input[name='formacao']:checked").val();
+
+                    var row = "";
+                    var path = '@Url.Content("~/FileUpload/")';
+
+                    $("#filtro").load(location.href + " #filtro>*", "");
+                        $.ajax({
+                        url: '@Url.Action("Formacao", "Filtro")',
+                        dataType: 'JSON',
+                        data: { id: selected_value, servico: @Session["servico"] },
+                        contentType: "application/json; charset=utf-8",
+                        success: function (data) {
+
+                             $.each(data, function (index) {
+                                var id = data[index].ID_COLABORADOR;
+                                let imageName = data[index].IMAGE_NAME;
+                                let imagePath = path + imageName;
+                                let sobre = data[index].SOBRE;
+
+                                row += '<div class="col-6 col-sm-8">' +
+                                    '<div class="list-group">' +
+                                    '<div class="d-flex w-100 justify-content-between " style="float:left;margin-right:3%; position:relative">' +
+                                    '<div class="list-group-item list-group-item-action flex-column align-items-start active">' +
+                                    '<img src="' + imagePath + '" class="img-rounded float-left" style="width:180px;height:200px" alt="teste">'+
+                                    '<h3>' + this.NOME + '</h3>' +
+                                    '<div id="desc">' +
+                                    '<p class="mb-1">'+ sobre + '</p>' +
+                                    '<button type="button" id="saibaMais" class="btn btn-secondary btn-sm pull-right" onclick="saibaMais(' + id + ')">Saiba mais</button>' +
+                                    '</div>' +
+                                    '</div>' +
+                                    '</div>' +
+                                    ' </div>'+
+                                    ' </div>';
+
+                            });
+                            $('#init').hide();
+                            $("#filtro").html(row);
+                        },
+                        error: function () {
+                                alert("sem sucesso");
+                            }
+                        });
+                    });
+            });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,163 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="~/lib/jQuery-Mask-Plugin-master/src/jquery.mask.js" type="text/javascript" asp-append-version="true"></script>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div style="margin-top:90PX">
+        <center><h1>Novo Colaborador</h1></center>
+        
+        <div class="col-md-7 col-md-offset-3">
+            @using (Html.BeginForm("NovoColaborador", "Login", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <form style="margin-top:20px" method="post" id="form1">
+
+                @*<img src="~/Images/perfil.jpg" class="img-rounded float-left" style="width:30%; margin-right:20px;" alt="teste">*@
+
+                <h5 style="color: red;">@ViewBag.Message</h5>
+                <div class="form-group">
+                    <label for="exampleFormControlInput13">Nome</label>
+                    <input class="form-control" id="nome" type="text" name="nome">
+                </div>
+                <div class="form-group">
+                    <label for="validationCustom04">CPF</label>
+                    <input type="text" class="form-control" id="cpf" name="cpf" placeholder="CPF" required>
+                </div>
+                <div class="form-group">
+                    <label for="validationCustom04" style="margin-top:10px">CREF</label>
+                    <input type="text" class="form-control" id="cref" name="cref" required>
+                </div>
+                <div class="form-group">
+                    <label for="validationCustom04" style="margin-top:10px">UF CREF</label>
+                    <select class="form-control form-control-lg" id="uf" name="uf" required>
+                        <option value="AC">AC</option>
+                        <option value="AL">AL</option>
+                        <option value="AP">AP</option>
+                        <option value="AM">AM</option>
+                        <option value="BA">BA</option>
+                        <option value="CE">CE</option>
+                        <option value="DF">DF</option>
+                        <option value="ES">ES</option>
+                        <option value="GO">GO</option>
+                        <option value="MA">MA</option>
+                        <option value="MT">MT</option>
+                        <option value="MS">MS</option>
+                        <option value="MG">MG</option>
+                        <option value="PA">PA</option>
+                        <option value="PB">PB</option>
+                        <option value="PR">PR</option>
+                        <option value="PE">PE</option>
+                        <option value="PI">PI</option>
+                        <option value="RN">RN</option>
+                        <option value="RS">RS</option>
+                        <option value="RJ">RJ</option>
+                        <option value="RO">RO</option>
+                        <option value="RR">RR</option>
+                        <option value="SC">SC</option>
+                        <option value="SP">SP</option>
+                        <option value="SE">SE</option>
+                        <option value="TO">TO</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="exampleFormControlInput1">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="nome@dominio.com" onblur="funcLogin()">
+                </div>
+
+                <div class="form-group">
+                    <label for="validationCustom04">Data Nascimento</label>
+                    <input type="text" class="form-control" id="dtNascimento" name="dtNascimento" required>
+
+                </div>
+
+                <div class="form-group">
+                    <label for="validationCustom04">Especialidade</label>
+                    <input type="text" class="form-control" id="especialidade" name="especialidade" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="exampleFormControlSelect2">Formação</label>
+                    <select id="formacao" name="formacao" class="form-control form-control-lg">
+                        <option>Licenciatura</option>
+                        <option>Bacharelado</option>
+                        <option>Pós-Graduação</option>
+                        <option>Mestrado</option>
+                        <option>Doutorado</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="exampleFormControlSelect1">Sobre</label>
+                    <textarea type="text" class="form-control" id="sobre" name="sobre" rows="8"></textarea>
+                    <small><span class="caracteres">500</span> Restantes <br></small>
+                </div>
+                <div class="form-group">
+                    <label for="exampleFormControlSelect">Metodologia</label>
+                    <textarea type="text" class="form-control" id="metodologia" name="metodologia" rows="8"></textarea>
+                    <small><span class="caractere">500</span> Restantes <br></small>
+                </div>
+
+                <label for="imagem">Foto para exibição</label>
+                @Html.TextBox("file", "", new { type = "file" })
+
+                <div class="form-group">
+                    <label for="exampleFormControlSelect1" style="margin-top:40px">Dados do login</label>
+                    <input type="text" class="form-control" id="emailLogin">
+                </div>
+                <div class="form-group">
+                    <label for="exampleFormControlSelect1">Senha</label>
+                    <input type="password" class="form-control" id="senhaLogin" name="senhaLogin">
+                </div>
+                <center>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </center>
+
+            </form>
+    }
+        </div>
+    </div>
+        <script type="text/javascript">
+            $('#cpf').mask('000.000.000-00', { placeholder: "___.___.___-__" });
+
+            $('#dtNascimento').mask('99/99/9999');
+
+            function funcLogin() {
+                document.getElementById("emailLogin").value = document.getElementById("email").value;
+            }
+
+            $(document).ready(function () {
+                $('.close, .leftmenutrigger, .navbar-toggler').on('click tap', function (e) {
+                    $('.side-nav').toggleClass("open");
+                    $('#wrapper').toggleClass("open");
+                    e.preventDefault();
+                });
+            });
+
+            $(document).on("input", "#sobre", function () {
+                var limite = 500;
+                var caracteresDigitados = $(this).val().length;
+                var caracteresRestantes = limite - caracteresDigitados;
+
+                $(".caracteres").text(caracteresRestantes);
+            });
+            $(document).on("input", "#metodologia", function () {
+                var limite = 500;
+                var caracteresDigitados = $(this).val().length;
+                var caracteresRestantes = limite - caracteresDigitados;
+
+                $(".caractere").text(caracteresRestantes);
+            });
+        </script>
+
+</body>
+</html>

@@ -1,0 +1,252 @@
+﻿@model IList<personal.Models.Agendamentos>
+@{
+    ViewBag.Title = "Agendamentos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <link href="https://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <link href="~/Content/bootstrap-datepicker.css" rel="stylesheet" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <script src="~/Scripts/bootstrap-datepicker.js"></script>
+    <script src="~/Scripts/bootstrap-datepicker.min.js"></script>
+    <style type="text/css">
+        body {
+            color: #404E67;
+            background: #F5F7FA;
+        }
+
+        .rating {
+            border: none;
+            float: left;
+        }
+
+            .rating > input {
+                display: none;
+            }
+
+            .rating > label:before {
+                margin: 5px;
+                font-size: 1.25em;
+                font-family: FontAwesome;
+                display: inline-block;
+                content: "\f005";
+            }
+
+            .rating > .half:before {
+                content: "\f089";
+                position: absolute;
+            }
+
+            .rating > label {
+                color: #ddd;
+                float: right;
+            }
+
+            /***** CSS Magic to Highlight Stars on Hover *****/
+
+            .rating > input:checked ~ label, /* show gold star when clicked */
+            .rating:not(:checked) > label:hover, /* hover current star */
+            .rating:not(:checked) > label:hover ~ label {
+                color: #FFD700;
+            }
+                /* hover previous stars in list */
+
+                .rating > input:checked + label:hover, /* hover current star when changing rating */
+                .rating > input:checked ~ label:hover,
+                .rating > label:hover ~ input:checked ~ label, /* lighten current selection */
+                .rating > input:checked ~ label:hover ~ label {
+                    color: #FFED85;
+                }
+    </style>
+</head>
+<body>
+    <div class="container col-md-8 col-md-offset-2 " style="margin-top:90px">
+        <div class="container">
+            <h2>Meus Agendamentos</h2>
+            <ul class="nav nav-tabs" style="margin-top:7%">
+                <li class="active"><a data-toggle="tab" href="#home">Agendados</a></li>
+                <li><a data-toggle="tab" onclick="teste()" href="#conc">Concluídos</a></li>
+            </ul>
+            <div class="container" style=" background:#ffffff">
+                <div class="tab-content">
+                    <div id="home" class="tab-pane fade in active">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Esporte</th>
+                                    <th scope="col">Data</th>
+                                    <th scope="col">Personal Trainer</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.DS_ESPORTE</td>
+                                        <td>@item.DATA</td>
+                                        <td>@item.DS_COLABORADOR</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="conc" class="tab-pane fade"></div>
+
+                    <div class="modal fade" id="ModalAvaliar" name="ModalAvaliar" tabindex="-1" role="dialog" aria-labelledby="ModalAvaliar" aria-hidden="true">
+                        <form method="post" action="~/Servicos/NovaModalidade">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="float:right">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <h5 class="modal-title" id="adicionarHorarios"><b>Avaliar Personal Trainer</b></h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <input class="form-control" type="hidden" id="idEsp" name="idEsp" value="">
+                                        <input class="form-control" type="hidden" id="idPers" name="idPers" value="">
+                                        <input class="form-control" type="hidden" id="dtHora" name="dtHora" value="">
+                                        <div id="horariosMod" name="horariosMod" class="modal-body col-lg-12" style="background: #F5F7FA">
+
+                                            <div id="av" style="background:#FFFFFF;height:80px" class="col-lg-12">
+                                                <fieldset class="rating" style="font-size:2vw;padding-right:20%;padding-left:22%">
+                                                    <input type="radio" id="star5" name="rating" value="5" onclick="salvar(5)" /><label class="full" for="star5" title="Awesome - 5 stars"></label>
+                                                    <input type="radio" id="star4half" name="rating" value="4 and a half" onclick="salvar(4.5)" /><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
+                                                    <input type="radio" id="star4" name="rating" value="4" onclick="salvar(4)" /><label class="full" for="star4" title="Pretty good - 4 stars"></label>
+                                                    <input type="radio" id="star3half" name="rating" value="3 and a half" onclick="salvar(3.5)" /><label class="half" for="star3half" title="Meh - 3.5 stars"></label>
+                                                    <input type="radio" id="star3" name="rating" value="3" onclick="salvar(3)" /><label class="full" for="star3" title="Meh - 3 stars"></label>
+                                                    <input type="radio" id="star2half" name="rating" value="2 and a half" onclick="salvar(2.5)" /><label class="half" for="star2half" title="Kinda bad - 2.5 stars"></label>
+                                                    <input type="radio" id="star2" name="rating" value="2" onclick="salvar(2)" /><label class="full" for="star2" title="Kinda bad - 2 stars"></label>
+                                                    <input type="radio" id="star1half" name="rating" value="1 and a half" onclick="salvar(1.5)" /><label class="half" for="star1half" title="Meh - 1.5 stars"></label>
+                                                    <input type="radio" id="star1" name="rating" value="1" onclick="salvar(1)" /><label class="full" for="star1" title="Sucks big time - 1 star"></label>
+                                                    <input type="radio" id="starhalf" name="rating" value="half" onclick="salvar(0.5)" /><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        function salvar(vlr) {
+            esporte = $('#idEsp').val();
+            personal = $('#idPers').val();
+            hora = $('#dtHora').val();
+                                 
+            $.ajax({
+                    url: '@Url.Action("SalvarAvaliacao", "Home")',
+                    dataType: 'JSON',
+                    data: { idEsp: esporte, idPersonal: personal, stars: vlr, dtHora: hora},
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        $('#ModalAvaliar').modal('hide');
+                    },
+                    error: function () {
+                    }
+             });
+        }
+
+        function teste() {
+             $.ajax({
+                    url: '@Url.Action("AgendamentosConcluidos", "Home")',
+                    dataType: 'JSON',
+                    data: {},
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        $("#conc").empty();
+                        row = "";
+                        row +=  '<table class="table table-striped" >' +
+                                '<thead>' +
+                                '<tr>' +
+                                '<th scope="col">Esporte</th>' +
+                                '<th scope="col">Data</th>' +
+                                '<th scope="col">Personal Trainer</th>' +
+                                '<th scope="col">Avaliar</th>' +
+                                '</tr>' +
+                                '</thead>' +
+                                '<tbody>';
+                        $.each(data, function (index) {
+
+                                    var esporte = data[index].DS_ESPORTE;
+                                    var dataAgendada = data[index].DATAFORMATADA;
+                                    var colaborador = data[index].DS_COLABORADOR;
+                                    var idEsporte = data[index].ID_ESPORTE;
+                                    var idColaborador = data[index].ID_COLABORADOR;
+                                    row +=  '<tr>' +
+                                            '<td >' + esporte + '<input class="form-control" type="hidden" id="espPersonal" name="espPersonal" value="' + idEsporte + '"> </td>' +
+                                            '<td>' + dataAgendada + '<input class="form-control" type="hidden" id="dtHora" name="dtHora" value="' + dataAgendada + '"> </td>' +
+                                            '<td>' + colaborador + '<input class="form-control" type="hidden" id="idPersonal" name="idPersonal" value="' + idColaborador + '"> </td>'+
+                                            '<td>' +
+                                            '<button id="btnAv" name="btnAv" class="btn btn-mini" title="Avaliar" style="background: #f9f9f9;padding:0px;margin-left: 12px;" onclick="carrega()" data-toggle="modal" data-target="#ModalAvaliar">' +
+                                            '<i class="fas fa-star"></i>' +
+                                            '</button>' +
+                                            '</td>' +
+                                            '<td>'+
+                                            '</td>'+
+                                            '</tr>';
+                                });
+                                row += '</tbody>'+
+                                       '</table>';
+
+                           $("#conc").append(row);
+
+
+                    },
+                    error: function () {
+                        alert("sem sucesso");
+                    }
+             });
+        }
+       
+        $(document).ready(function () {
+            $(document).on("click", "#btnAv", function () {
+
+            var idEsporte = 0;
+            $(this).closest('tr').find('td').each(
+                function () {
+                    idEsporte = $(this).closest('tr').find('#espPersonal').val();
+                },
+            );
+
+            var dtHr = 0;
+            $(this).closest('tr').find('td').each(
+                function () {
+                    dtHr = $(this).closest('tr').find('#dtHora').val();
+                },
+            );
+
+
+            var idPersonal = 0;
+            $(this).closest('tr').find('td').each(
+                function () {
+                    idPersonal = $(this).closest('tr').find('#idPersonal').val();
+                },
+            );
+            $(".modal-body #dtHora").val(dtHr);
+            $(".modal-body #idEsp").val(idEsporte);
+            $(".modal-body #idPers").val(idPersonal);
+
+
+            });
+        });
+
+
+
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,171 @@
+﻿@model IList<personal.Models.Colaborador>
+@{
+    ViewBag.Title = "Autorizar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <link href="https://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+    <link href="~/Content/bootstrap-datepicker.css" rel="stylesheet" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <style type="text/css">
+        body {
+            color: #404E67;
+            background: #F5F7FA;
+        }
+    </style>
+</head>
+<body>
+    <div class="container col-md-8 col-md-offset-2 " style="margin-top:90px">
+        <div class="container">
+            <h2>Autorizar</h2>
+            <ul class="nav nav-tabs" style="margin-top:7%">
+                <li class="active"><a data-toggle="tab" href="#home">Personal Trainer</a></li>
+                <li><a data-toggle="tab" onclick="teste()" href="#conc">Novo Esporte</a></li>
+            </ul>
+            <div class="container" style=" background:#ffffff">
+                <div class="tab-content">
+                    <div id="home" class="tab-pane fade in active">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">NOME</th>
+                                    <th scope="col">N° CREF</th>
+                                    <th scope="col">UF CREF</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                <tr>
+                                    <td>@item.ID_COLABORADOR</td>
+                                    <td>@item.NOME<input class="form-control" type="hidden" id="nome" name="nome" value="' + @item.NOME + '"></td>
+                                    <td>@item.CREF<input class="form-control" type="hidden" id="cref" name="cref" value="' + @item.CREF + '"></td>
+                                    <td>@item.UF_CREF<input class="form-control" type="hidden" id="ufcref" name="ufcref" value="' + @item.UF_CREF + '"></td>
+                                    <td>
+                                        <button id="btnAv" name="btnAv" class="btn btn-mini" title="Avaliar" style="background: #f9f9f9;padding:0px;margin-left: 12px;" onclick="autoriza(@item.ID_COLABORADOR)">
+                                            <i class="fas fa-check"></i>
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <button id="btnAv" name="btnAv" class="btn btn-mini" title="Avaliar" style="background: #f9f9f9;padding:0px;margin-left: 12px;" onclick="exclui(@item.ID_COLABORADOR)">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="conc" class="tab-pane fade"></div>
+
+                    <div class="modal fade" id="ModalAvaliar" name="ModalAvaliar" tabindex="-1" role="dialog" aria-labelledby="ModalAvaliar" aria-hidden="true">
+                        <form method="post" action="~/Servicos/NovaModalidade">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="float:right">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <h5 class="modal-title" id="adicionarHorarios"><b>Avaliar Personal Trainer</b></h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        function teste() {
+             $.ajax({
+                    url: '@Url.Action("AutorizarEsporte", "Servicos")',
+                    dataType: 'JSON',
+                    data: {},
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        $("#conc").empty();
+                        row = "";
+                        row +=  '<table class="table table-striped" >' +
+                                '<thead>' +
+                                '<tr>' +
+                                '<th scope="col">ID</th>' +
+                                '<th scope="col">ESPORTE</th>' +
+                                '</tr>' +
+                                '</thead>' +
+                                '<tbody>';
+                        $.each(data, function (index) {
+
+                                    var esporte = data[index].ID_NOVOESPORTE;
+                                    var descricao = data[index].DESCRICAO;
+
+                                    row +=  '<tr>' +
+                                            '<td >' + esporte + '<input class="form-control" type="hidden" id="esporte" name="esporte" value="' + esporte + '"> </td>' +
+                                            '<td>' + descricao + '<input class="form-control" type="hidden" id="descricao" name="descricao" value="' + descricao + '"> </td>' +
+                                            '<td>' +
+                                            '<button id="btnAv" name="btnAv" class="btn btn-mini" title="Avaliar" style="background: #f9f9f9;padding:0px;margin-left: 12px;" onclick="carrega()" data-toggle="modal" data-target="#ModalAvaliar">' +
+                                            '<i class="fas fa-star"></i>' +
+                                            '</button>' +
+                                            '</td>' +
+                                            '<td>'+
+                                            '</td>'+
+                                            '</tr>';
+                                });
+                                row += '</tbody>'+
+                                       '</table>';
+
+                           $("#conc").append(row);
+
+
+                    },
+                    error: function () {
+                        alert("sem sucesso");
+                    }
+             });
+        }
+        function autoriza(id) {
+            $.ajax({
+                    url: '@Url.Action("salvaAutorizacao", "Servicos")',
+                    dataType: 'JSON',
+                    data: {idColab: id},
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        location.reload(true);
+                    },
+                    error: function () {
+                    }
+             });
+
+        }
+        function exclui(id) {
+            $.ajax({
+                    url: '@Url.Action("bloqueiaAutorizacao", "Servicos")',
+                    dataType: 'JSON',
+                    data: {idColab: id},
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        location.reload(true);
+                    },
+                    error: function () {
+                    }
+             });
+
+        }
+
+
+
+    </script>
+</body>
+</html>

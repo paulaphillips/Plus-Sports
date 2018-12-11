@@ -1,0 +1,85 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="col-md-5 col-md-offset-3">
+        <form style="width: 100%;" action="~/Login/Index" method="post" id="form1">
+
+            <div align="right" style="margin-bottom: 20px; margin-top:110px">
+                <input type="checkbox" id="verificacao" name="verificacao" data-toggle="toggle" data-on="Aluno" data-off="Personal" data-size="small" checked="checked">
+            </div>
+            <img src="~/Images/logoPlusSports.png" class="img-fluid" alt="Responsive image" style="max-width: 100%">
+            <h5 style="color: red;">@ViewBag.Message</h5>
+
+            <div class="form-group">
+                <label for="InputEmail" style="max-width:45%">Email:</label>
+                <input type="text" class="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="Email">
+            </div>
+            <div class="form-group">
+                <label for="passwordLabel">Senha:</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Senha">
+                <center style="margin-top: 5px">
+                    <button type="button" class="btn-link" onclick="adicionar(verificacao)">Ainda não é cadastrado? Clique aqui</button>
+                </center>
+            </div>
+
+            <center>
+                <button type="submit" form="form1" class="btn btn-primary">Logar</button>
+
+            </center>
+        </form>
+    </div>
+
+
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('.close, .leftmenutrigger, .navbar-toggler').on('click tap', function (e) {
+                $('.side-nav').toggleClass("open");
+                $('#wrapper').toggleClass("open");
+                e.preventDefault();
+            });
+        });
+
+        $("#verificacao").change(function () {
+            if ($(this).prop("checked") == true) {
+                $("#verificacao").prop("checked", true);
+                $("#verificacao").val("on");
+            } else {
+                $("#verificacao").prop("checked", false);
+                $("#verificacao").val("off");
+            }
+        });
+        function adicionar(verificacao) {
+            var verificacao = verificacao.value;
+
+            if (verificacao == "on") {
+                window.location.href = "/Home/NovoUsuario";
+            } else {
+                window.location.href = "/Home/NovoColaborador";
+            }
+
+        }
+
+
+    </script>
+
+</body>
+</html>
+
